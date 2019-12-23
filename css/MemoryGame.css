@@ -103,6 +103,7 @@ body {
   margin: auto;
   padding: 0;
   background-color:whitesmoke;
+  background-image: url(../images/background/bg.jpg);
   z-index: 4;
 }
 #memory--settings-modal form {
