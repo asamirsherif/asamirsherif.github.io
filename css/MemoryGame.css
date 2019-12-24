@@ -119,14 +119,14 @@ body {
 }
 
 .memory--settings-label {
-  font-family: 'Gloria Hallelujah', cursive;
+  font-family: 'Changa', cursive;
   margin:8px 0;
   color: #fdfdfdf6;
 }
 
 #memory--settings-grid,
 #memory--settings-reset{
-  font-family: 'Gloria Hallelujah', cursive;
+  font-family: 'Gloria Hallelujah', 'Changa',cursive;
   display: block;
   margin: auto;
   background-color: #79e712c7;
@@ -152,6 +152,7 @@ body {
 
 
 #memory--settings-grid option {
+  font-family: 'Changa', cursive;
   padding-top:5px;
   padding-bottom:5px;
 }

@@ -35,7 +35,6 @@
     var selectWidget = document.getElementById("memory--settings-grid").valueOf();
     var grid = selectWidget.options[selectWidget.selectedIndex].value;
     var gridValues = grid.split('x'); //split "2x3" to {2,3}
-    console.log(gridValues);
     var cards = $.initialize(Number(gridValues[0]), Number(gridValues[1]), imagesAvailable);
     
 
@@ -47,6 +46,7 @@
       document.getElementById('memory--end-game-moves').innerText = "";
       document.getElementById('memory--end-game-mistakes').innerText = "";
       buildLayout($.cards, $.settings.rows, $.settings.columns);
+      flashCards();
     }
 
   };
@@ -68,6 +68,21 @@
   }
   
   music.addEventListener('click', playPause);
+  
+
+  //Flash Cards
+  var flashCards = function() {
+    for(i=0; i< $.cards.length; i++) {
+      var childNodes = document.getElementById('memory--cards').childNodes;
+      childNodes[i].classList.toggle('clicked');
+    }
+    setTimeout(function(){
+        for(i=0; i< $.cards.length; i++) {
+          var childNodes = document.getElementById('memory--cards').childNodes;
+          childNodes[i].classList.remove('clicked');
+        }
+    }, 1200)
+}
 
 
   // Handle clicking on card
