@@ -4,6 +4,9 @@
     <meta charset="UTF-8" />
     <title>Memory Game</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet prefetch" href="https://fonts.googleapis.com/css?family=Coda">
+    <link href="https://fonts.googleapis.com/css?family=Changa&display=swap" rel="stylesheet">
+    <link rel="stylesheet prefetch" href="https://fonts.googleapis.com/css?family=Gloria+Hallelujah|Permanent+Marker" >
     <script src="js/Controller.js" type="text/javascript"></script>
     <script src="js/Model.js" type="text/javascript"></script>
     <link href="css/MemoryGame.css" type="text/css" rel="stylesheet" />
@@ -19,6 +22,10 @@
             <option value="4x5">Hard</option>
             <option value="5x6">Don't do it!</option>
           </select>
+          <h2 class="memory--settings-label">Music:</h2>
+          <div id='sound_button'><img title='Music Playing' alt='Play The Music' src='./images/music/on.png' /></div>
+          <audio autoplay="true" volume="0.5" loop="true" width="0" height="0" id="sound" src="./music/music.mp3" type="audio/music.mp3" ></audio>
+          <br>
           <input id="memory--settings-reset" type="submit" value="Start New Game" />
         </form>
       </div>

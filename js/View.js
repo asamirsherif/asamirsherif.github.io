@@ -19,9 +19,11 @@
   // Handle clicking on settings icon
   var settings = document.getElementById('memory--settings-icon');
   var modal = document.getElementById('memory--settings-modal');
+  var endgame = document.getElementById('memory--end-game-modal');
   var handleOpenSettings = function (event) {
     event.preventDefault();
     modal.classList.toggle('show');
+    endgame.classList.remove('show');
   };
   settings.addEventListener('click', handleOpenSettings);
 
@@ -42,11 +44,31 @@
       document.getElementById('memory--end-game-modal').classList.remove('show');
       document.getElementById('memory--end-game-message').innerText = "";
       document.getElementById('memory--end-game-score').innerText = "";
+      document.getElementById('memory--end-game-moves').innerText = "";
+      document.getElementById('memory--end-game-mistakes').innerText = "";
       buildLayout($.cards, $.settings.rows, $.settings.columns);
     }
 
   };
   reset.addEventListener('click', handleSettingsSubmission);
+
+  //Music Play/Pause
+
+  var music = document.getElementById('sound_button');
+  var playPause = function(event){
+    var snd = document.getElementById("sound"); 
+    var snd_btn = document.getElementById("sound_button"); 
+    snd.muted = !snd.muted; 
+        if(snd.muted){ 
+          snd_btn.innerHTML = "<img alt='Pause The Music' title='Music Paused' src='./images/music/off.png' />"; 
+        } 
+        else { 
+          snd_btn.innerHTML = "<img alt='Play The Music' title='Music Palying' src='./images/music/on.png' />"; 
+        }
+  }
+  
+  music.addEventListener('click', playPause);
+
 
   // Handle clicking on card
   var handleFlipCard = function (event) {
@@ -72,9 +94,9 @@
       var message = getEndGameMessage(score);
 
       document.getElementById('memory--end-game-message').textContent = message;
-      document.getElementById('memory--end-game-moves').textContent = 'Moves: ' + $.attempts;
-      document.getElementById('memory--end-game-mistakes').textContent = 'Mistakes: ' + $.mistakes;
-      document.getElementById('memory--end-game-score').textContent = 'Score: ' + score + ' / 100';
+      document.getElementById('memory--end-game-moves').textContent = 'حركاتك : ' + $.attempts;
+      document.getElementById('memory--end-game-mistakes').textContent = 'غلطاتك : ' + $.mistakes;
+      document.getElementById('memory--end-game-score').textContent = 'درجتك :' + score + ' / 100';
 
       document.getElementById("memory--end-game-modal").classList.toggle('show');
     }
@@ -85,16 +107,16 @@
     var message = "";
 
     if (score == 100) {
-      message = "Excellent job!"
+      message = "عظمة علي عظمة"
     }
     else if (score >= 70 ) {
-      message = "Great job!"
+      message = "فنان بيلعب، أول مرة اشوف فنان بيلعب"
     }
     else if (score >= 50) {
-      message = "Good job!"
+      message = "حلو و يجي منك"
     }
     else {
-      message = "You can do better.";
+      message = "أداءك ضعيف";
     }
 
     return message;
