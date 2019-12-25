@@ -1,24 +1,18 @@
 /**
- * The goal is to match pairs of cards in the least
- * number of matching attempts.
- * Model
+ * @namespace a class object in MemoryGame object for card control
  */
-
-/**
- * @namespace Card object
- */
-MemoryGame.Card = function(value, isMatchingCard) {
+MemoryGame.Card = function(value, matchingCard) {
   this.value = value;
-  this.isRevealed = false;
-  if (isMatchingCard) {
-    this.isMatchingCard = true;
+  this.Revealed = false;
+  if (matchingCard) {
+    this.matchingCard = true;
   }
 
   this.reveal = function() {
-    this.isRevealed = true;
+    this.Revealed = true;
   }
 
-  this.conceal = function() {
-    this.isRevealed = false;
+  this.hide = function() {
+    this.Revealed = false;
   }
 };

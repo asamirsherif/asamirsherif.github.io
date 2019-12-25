@@ -12,44 +12,44 @@
     <link href="css/MemoryGame.css" type="text/css" rel="stylesheet" />
   </head>
   <body>
-    <section id="memory--settings-modal" class="valign-table modal show">
+    <section id="game--settings-modal" class="valign-table modal show">
       <div class="valign-cell">
         <form>
-          <h2 class="memory--settings-label">: الصعوبة</h2>
-          <select id="memory--settings-grid">
+          <h2 class="game--settings-label">: الصعوبة</h2>
+          <select id="game--settings-grid">
             <option value="2x3">كلام عيال</option>
             <option value="3x4" selected>العادي يعني</option>
             <option value="4x5">حاجه اروش</option>
             <option value="5x6">قلبك ميت</option>
           </select>
-          <h2 class="memory--settings-label">: الموسيقي </h2>
+          <h2 class="game--settings-lable">: الموسيقي </h2>
           <div id='sound_button'><img title='Music Playing' alt='Play The Music' src='./images/music/on.png' /></div>
           <br>
-          <input id="memory--settings-reset" type="submit" value="ابدأ اللعب" />
+          <input id="game--settings-reset" type="submit" value="ابدأ اللعب" />
         </form>
       </div>
     </section>
-    <section id="memory--end-game-modal" class="valign-table modal">
+    <section id="game--end-game-modal" class="valign-table modal">
       <div class="valign-cell">
         <div class="wrapper">
-          <h2 id="memory--end-game-message"></h2>
-          <h3 id="memory--end-game-moves"></h3>
-          <h3 id="memory--end-game-mistakes"></h3>
-          <h3 id="memory--end-game-score"></h3>
+          <h2 id="game--end-game-message"></h2>
+          <h3 id="game--end-game-moves"></h3>
+          <h3 id="game--end-game-mistakes"></h3>
+          <h3 id="game--end-game-score"></h3>
         </div>
       </div>
     </section>
-    <section id="memory--app-container">
-      <ul id="memory--cards">
+    <section id="game--app-container">
+      <ul id="game--cards">
       </ul>
-    </section>
-    <section class="memory--menu-bar">
+    </section> 
+    <section class="game--menu-bar">
       <div class="inner">
-        <div class="left"><h1 class="memory--app-name">Memory Game</h1></div>
-        <div class="right"><a href="#settings"><img id="memory--settings-icon" src="images/gear.png" /></a></div>
+        <div class="left"><h1 class="game--app-name">Memory Game</h1></div>
+        <div class="right"><a href="#settings"><img id="game--settings-icon" src="images/gear.png" /></a></div>
       </div>
     </section>
-    <audio autoplay="true" volume="0.5" loop="true" width="0" height="0" id="sound" src="./music/music.mp3" type="audio/music.mp3" ></audio>
+    <audio autoplay="true" controls volume="1" loop="true" width="0" height="0" id="sound" src="./music/music.mp3" type="audio/music.mp3" ></audio>
     <script src="js/View.js" type="text/javascript"></script>
   </body>
 </html>

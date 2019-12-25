@@ -1,56 +1,51 @@
 /**
- * Description: The game interface
- * View
+ * game UI
+ * 
  */
-
+//anonymous function in MemoryGame object
 (function($) {
+  
+  // time before card reflip
+  var noMatchTime = 1000;
 
-  /************ Start hard coded settings ******************/
+  // images in database (in css file)
+  var imagesInHand = 15;
 
-  // How long a non matching card is displayed once clicked.
-  var nonMatchingCardTime = 1000;
-
-  // Shuffle card images: How many different images are available to shuffle
-  // from?
-  var imagesAvailable = 15;
-
-  /************ End hard coded settings ******************/
-
-  // Handle clicking on settings icon
-  var settings = document.getElementById('memory--settings-icon');
-  var modal = document.getElementById('memory--settings-modal');
-  var endgame = document.getElementById('memory--end-game-modal');
-  var handleOpenSettings = function (event) {
+  // when setting icon opened
+  var settings = document.getElementById('game--settings-icon');
+  var modal = document.getElementById('game--settings-modal');
+  var endgame = document.getElementById('game--end-game-modal');
+  var openSettings = function (event) {
     event.preventDefault();
     modal.classList.toggle('show');
     endgame.classList.remove('show');
   };
-  settings.addEventListener('click', handleOpenSettings);
+  settings.addEventListener('click', openSettings);
 
-  // Handle settings form submission
-  var reset = document.getElementById('memory--settings-reset');
-  var handleSettingsSubmission = function (event) {
+  // when start button opened
+  var start = document.getElementById('game--settings-reset');
+  var startSetting = function (event) {
     event.preventDefault();
 
-    var selectWidget = document.getElementById("memory--settings-grid").valueOf();
-    var grid = selectWidget.options[selectWidget.selectedIndex].value;
-    var gridValues = grid.split('x'); //split "2x3" to {2,3}
-    var cards = $.initialize(Number(gridValues[0]), Number(gridValues[1]), imagesAvailable);
+    var widget = document.getElementById("game--settings-grid").valueOf();
+    var rowsAndColums = widget.options[widget.selectedIndex].value;
+    var grid = rowsAndColums.split('x'); //split "2x3" to {2,3}
+    var cards = $.initialize(Number(grid[0]), Number(grid[1]), imagesInHand);
     
 
     if (cards) {
-      document.getElementById('memory--settings-modal').classList.remove('show');
-      document.getElementById('memory--end-game-modal').classList.remove('show');
-      document.getElementById('memory--end-game-message').innerText = "";
-      document.getElementById('memory--end-game-score').innerText = "";
-      document.getElementById('memory--end-game-moves').innerText = "";
-      document.getElementById('memory--end-game-mistakes').innerText = "";
-      buildLayout($.cards, $.settings.rows, $.settings.columns);
+      document.getElementById('game--settings-modal').classList.remove('show');
+      document.getElementById('game--end-game-modal').classList.remove('show');
+      document.getElementById('game--end-game-message').innerText = "";
+      document.getElementById('game--end-game-score').innerText = "";
+      document.getElementById('game--end-game-moves').innerText = "";
+      document.getElementById('game--end-game-mistakes').innerText = "";
+      createLayout($.cards, $.settings.rows, $.settings.columns);
       flashCards();
     }
 
   };
-  reset.addEventListener('click', handleSettingsSubmission);
+  start.addEventListener('click', startSetting);
 
   //Music Play/Pause
 
@@ -73,20 +68,20 @@
   //Flash Cards
   var flashCards = function() {
     for(i=0; i< $.cards.length; i++) {
-      var childNodes = document.getElementById('memory--cards').childNodes;
-      childNodes[i].classList.toggle('clicked');
+      var childNodes = document.getElementById('game--cards').childNodes;
+      childNodes[i].classList.toggle('opened');
     }
     setTimeout(function(){
         for(i=0; i< $.cards.length; i++) {
-          var childNodes = document.getElementById('memory--cards').childNodes;
-          childNodes[i].classList.remove('clicked');
+          var childNodes = document.getElementById('game--cards').childNodes;
+          childNodes[i].classList.remove('opened');
         }
     }, 1200)
 }
 
 
-  // Handle clicking on card
-  var handleFlipCard = function (event) {
+  // when Card is opened
+  var flipCard = function (event) {
 
     event.preventDefault();
 
@@ -94,40 +89,40 @@
     console.log(status);
 
     if (status.code != 0 ) {
-      this.classList.toggle('clicked');
+      this.classList.toggle('opened');
     }
 
     if (status.code == 3 ) {
       setTimeout(function () {
-        var childNodes = document.getElementById('memory--cards').childNodes;
-        childNodes[status.args[0]].classList.remove('clicked');
-        childNodes[status.args[1]].classList.remove('clicked');
-      }.bind(status), nonMatchingCardTime);
+        var childNodes = document.getElementById('game--cards').childNodes;
+        childNodes[status.args[0]].classList.remove('opened');
+        childNodes[status.args[1]].classList.remove('opened');
+      }.bind(status), noMatchTime);
     }
     else if (status.code == 4) {
-      var score = parseInt((($.attempts - $.mistakes) / $.attempts) * 100, 10);
-      var message = getEndGameMessage(score);
+      var totalScore = parseInt((($.trials - $.wrongMoves) / $.trials) * 100, 10);
+      var message = endGameModal(totalScore);
 
-      document.getElementById('memory--end-game-message').textContent = message;
-      document.getElementById('memory--end-game-moves').textContent = 'حركاتك : ' + $.attempts;
-      document.getElementById('memory--end-game-mistakes').textContent = 'غلطاتك : ' + $.mistakes;
-      document.getElementById('memory--end-game-score').textContent = 'درجتك :' + score + ' / 100';
+      document.getElementById('game--end-game-message').textContent = message;
+      document.getElementById('game--end-game-moves').textContent = 'حركاتك : ' + $.trials;
+      document.getElementById('game--end-game-mistakes').textContent = 'غلطاتك : ' + $.wrongMoves;
+      document.getElementById('game--end-game-score').textContent = 'درجتك :' + totalScore + ' / 100';
 
-      document.getElementById("memory--end-game-modal").classList.toggle('show');
+      document.getElementById("game--end-game-modal").classList.toggle('show');
     }
 
   };
 
-  var getEndGameMessage = function(score) {
+  var endGameModal = function(totalScore) {
     var message = "";
 
-    if (score == 100) {
+    if (totalScore >= 90) {
       message = "عظمة علي عظمة"
     }
-    else if (score >= 70 ) {
+    else if (totalScore >= 70 ) {
       message = "فنان بيلعب، أول مرة اشوف فنان بيلعب"
     }
-    else if (score >= 50) {
+    else if (totalScore >= 50) {
       message = "حلو و يجي منك"
     }
     else {
@@ -137,91 +132,91 @@
     return message;
   }
 
-  // Build grid of cards
-  var buildLayout = function (cards, rows, columns) {
+  // create the game layout
+  var createLayout = function (cards, rows, columns) {
     if (!cards.length) {
       return;
     }
 
-    var memoryCards = document.getElementById("memory--cards");
+    var gameCards = document.getElementById("game--cards");
     var index = 0;
 
-    var cardMaxWidth = document.getElementById('memory--app-container').offsetWidth / columns;
-    var cardHeightForMaxWidth = cardMaxWidth * (3 / 4);
+    var cardWidth = document.getElementById('game--app-container').offsetWidth / columns;
+    var heightWidthRatio = cardWidth * (3 / 4);
 
-    var cardMaxHeight = document.getElementById('memory--app-container').offsetHeight / rows;
-    var cardWidthForMaxHeight = cardMaxHeight * (4 / 3);
+    var cardHeight = document.getElementById('game--app-container').offsetHeight / rows;
+    var widthHeightRatio = cardHeight * (4 / 3);
 
-    //console.log(memoryCards); /*resize testing*/ 
+    //console.log(gameCards); /*resize testing*/ 
 
-    // Clean up. Remove all child nodes and card clicking event listeners.
-    while (memoryCards.firstChild) {
-      memoryCards.firstChild.removeEventListener('click', handleFlipCard);
-      memoryCards.removeChild(memoryCards.firstChild);
+    // clear all child nodes
+    while (gameCards.firstChild) {
+      gameCards.firstChild.removeEventListener('click', flipCard);
+      gameCards.removeChild(gameCards.firstChild);
     }
 
     for (var i = 0; i < rows; i++) {
       for (var j = 0; j < columns; j++) {
         // Use cloneNode(true) otherwise only one node is appended
-        memoryCards.appendChild(buildCardNode(index, cards[index],
+        gameCards.appendChild(createCard(index, cards[index],
           (100 / columns) + "%", (100 / rows) + "%"));
         index++;
       }
     }
 
-    // Resize cards to fit in viewport
-    if (cardMaxHeight > cardHeightForMaxWidth) {
+    // resize cards
+    if (cardHeight > heightWidthRatio) {
       // Update height
-      memoryCards.style.height = (cardHeightForMaxWidth * rows) + "px";
-      memoryCards.style.width = document.getElementById('memory--app-container').offsetWidth + "px";
-      memoryCards.style.top = ((cardMaxHeight * rows - (cardHeightForMaxWidth * rows)) / 2) + "px";
+      gameCards.style.height = (heightWidthRatio * rows) + "px";
+      gameCards.style.width = document.getElementById('game--app-container').offsetWidth + "px";
+      gameCards.style.top = ((cardHeight * rows - (heightWidthRatio * rows)) / 2) + "px";
     }
     else {
-      // Update Width
-      memoryCards.style.width = (cardWidthForMaxHeight * columns) + "px";
-      memoryCards.style.height = document.getElementById('memory--app-container').offsetHeight + "px";
-      memoryCards.style.top = 0;
+      // width control
+      gameCards.style.width = (widthHeightRatio * columns) + "px";
+      gameCards.style.height = document.getElementById('game--app-container').offsetHeight + "px";
+      gameCards.style.top = 0;
     }
 
   };
 
-  // Update on resize
+  // resize control
   window.addEventListener('resize', function() {
-    buildLayout($.cards, $.settings.rows, $.settings.columns);
+    createLayout($.cards, $.settings.rows, $.settings.columns);
   }, true);
 
   // Build single card
-  var buildCardNode = function (index, card, width, height) {
-    var flipContainer = document.createElement("li");
+  var createCard = function (index, card, width, height) {
+    var cardContainer = document.createElement("li");
     var flipper = document.createElement("div");
-    var front = document.createElement("a");
+    var face = document.createElement("a");
     var back = document.createElement("a");
 
-    flipContainer.index = index;
-    flipContainer.style.width = width;
-    flipContainer.style.height = height;
-    flipContainer.classList.add("flip-container");
-    if (card.isRevealed) {
-      flipContainer.classList.add("clicked");
+    cardContainer.index = index;
+    cardContainer.style.width = width;
+    cardContainer.style.height = height;
+    cardContainer.classList.add("card-container");
+    if (card.Revealed) {
+      cardContainer.classList.add("opened");
     }
 
     flipper.classList.add("flipper");
-    front.classList.add("front");
-    front.setAttribute("href", "#");
+    face.classList.add("face");
+    face.setAttribute("href", "#");
     back.classList.add("back");
     back.classList.add("card-" + card.value);
-    if (card.isMatchingCard) {
+    if (card.matchingCard) {
       back.classList.add("matching");
     }
     back.setAttribute("href", "#");
 
-    flipper.appendChild(front);
+    flipper.appendChild(face);
     flipper.appendChild(back);
-    flipContainer.appendChild(flipper);
+    cardContainer.appendChild(flipper);
 
-    flipContainer.addEventListener('click', handleFlipCard);
+    cardContainer.addEventListener('click', flipCard);
 
-    return flipContainer;
+    return cardContainer;
   };
 
 })(MemoryGame);
