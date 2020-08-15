@@ -6,10 +6,10 @@ $state = $_GET["state"];
 $url = 'https://smat-flowmac.firebaseio.com/'; 
 $token = 'cnML07dWO9ajaE8J0uLle2q5x13ntbVGoeCLQ9um'; 
 
-$DEFAULT_PATH = '/smart-flowmac/control/';
+$DEFAULT_PATH = '/control/-MEJLe-8j-v9FRarMaa6';
 
 $_devicestatus= array(
-'operationMode' => $param1,
+'operationMode' => $state,
 );
 
  
